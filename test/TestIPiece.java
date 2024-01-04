@@ -15,7 +15,11 @@ import model.pieces.OPiece;
 import model.pieces.SPiece;
 import model.pieces.TPiece;
 import model.pieces.Tetra;
+import model.pieces.TetraType;
+import model.pieces.Tetromino;
 import model.pieces.ZPiece;
+import view.TextView;
+import view.TextualView;
 
 public class TestIPiece {
 
@@ -40,7 +44,6 @@ public class TestIPiece {
   }
 
   // tests for getters, setters, & equality methods
-
   @Test
   public void testIPieceGetCenterPiece() {
     setUp();
@@ -110,6 +113,24 @@ public class TestIPiece {
   }
 
   @Test
+  public void testIPieceMoves2() {
+    setUp();
+    Board b = makeCustomBoard();
+    TetrisModel m = new TetrisModel(b);
+    TextualView t = new TextView(m);
+    Tetra testPiece = new IPiece(new Brick(5, 1));
+
+    testPiece.moveDown();
+    Assert.assertFalse(testPiece.canMoveDown(b));
+    Assert.assertFalse(testPiece.canRotateCW(b));
+    Assert.assertFalse(testPiece.canRotateCCW(b));
+
+    b.addPiece(testPiece);
+    System.out.println(t.toString());
+
+  }
+
+  @Test
   public void testIPieceRotCW() {
     setUp();
     Tetra exp = new IPiece(List.of(new Brick(4, 5), new Brick(3, 5), new Brick(5, 5), new Brick(6, 5)));
@@ -163,14 +184,6 @@ public class TestIPiece {
 
   //    m.setCurrentPiece(iPiece);
   //    m.moveDown();
-  }
-
-  @Test
-  public void testCanMoveDown2() {
-    setUp();
-    Board b = m.getBoard();
-    Tetra testPiece = new IPiece(new Brick(5, 0));
-
   }
 
   @Test
