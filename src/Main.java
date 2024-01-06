@@ -10,10 +10,16 @@ public class Main {
   public static void main(String[] args) {
   //    Random rand = new Random();
   //    TetraFactory f = new TetraFactory(rand.nextInt());
+    TetrisController c;
     TetraFactory f = new TetraFactory(12345);
     TetrisModelImpl m = new TetrisModelImpl();
     TetrisView v = new TetrisGUI(m);
-    TetrisController c = new TetrisController(m, v, "medium");
+    if (args.length != 1) {
+      c = new TetrisController(m, v, "medium");
+    } else {
+      String s = args[0];
+      c = new TetrisController(m, v, s);
+    }
     c.run();
   }
 }

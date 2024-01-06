@@ -96,16 +96,11 @@ public class TetrisController implements ViewFeatures, ModelFeatures {
   }
 
   private int selectDifficulty(String diff) {
-    switch (diff.toLowerCase()) {
-      case "easy", "e":
-        return 1000;
-      case "medium", "m":
-        return 500;
-      case "hard", "h":
-        return 250;
-      default:
-        return 1000;
-    }
+    return switch (diff.toLowerCase()) {
+      case "medium", "m" -> 500;
+      case "hard", "h" -> 250;
+      default -> 1000;
+    };
   }
 
   @Override
