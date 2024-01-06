@@ -5,77 +5,66 @@ import java.util.List;
 
 import model.Board;
 
+/**
+ * Represents a tetromino.
+ */
 public abstract class Tetromino implements Tetra {
-  private List<Brick> bricks; // List of bricks that make up the tetra
-  private int rotation; // 0 = 0 degrees, 1 = 90 degrees, 2 = 180 degrees, 3 = 270 degrees
-  private Brick centerBrick; // The center brick of the tetra
+  // List of bricks that make up the tetra
+  private List<Brick> bricks;
+  // 0 = 0 degrees, 1 = 90 degrees, 2 = 180 degrees, 3 = 270 degrees
+  private int rotation;
+  // The center brick of the tetra
+  private Brick centerBrick;
+  // The type of tetra
+  private final TetraType type;
+  // True if this tetra has been held, false otherwise
+  private boolean hasBeenHeld;
 
-  public Tetromino(List<Brick> bricks) {
+  /**
+   * Constructs a tetromino with the given bricks and type. Used primarily for testing.
+   *
+   * @param bricks the bricks that make up the tetromino
+   * @param type   the type of tetromino
+   */
+  public Tetromino(List<Brick> bricks, TetraType type) {
     this.bricks = bricks;
     this.rotation = 0;
     this.centerBrick = bricks.get(0);
+    this.type = type;
+    this.hasBeenHeld = false;
   }
 
+  public Tetromino(Tetra t) {
+    this.bricks = List.of(t.getBricks());
+    this.rotation = t.getRotation();
+    this.centerBrick = t.getCenterBrick();
+    this.type = t.getType();
+    this.hasBeenHeld = t.hasBeenHeld();
+  }
+
+  /**
+   * Constructs a tetromino with the given centerBrick and type.
+   *
+   * @param centerBrick the centerBrick of the tetromino
+   * @param type        the type of tetromino
+   */
   public Tetromino(Brick centerBrick, TetraType type) {
     this.centerBrick = centerBrick;
     this.rotation = 0;
     this.bricks = new ArrayList<>();
-    this.makeTetra(centerBrick, type);
+    this.type = type;
+    this.hasBeenHeld = false;
+    this.makeTetra();
   }
 
-  /**
-   * Makes a tetromino based on the center brick and the type of tetromino.
-   *
-   * @param centerBrick The center brick of the tetromino
-   * @param type        The type of tetromino
-   */
-  private void makeTetra(Brick centerBrick, TetraType type) {
-    switch (type) {
-      case I:
-        bricks.add(centerBrick);
-        bricks.add(new Brick(centerBrick.getX() - 1, centerBrick.getY()));
-        bricks.add(new Brick(centerBrick.getX() + 1, centerBrick.getY()));
-        bricks.add(new Brick(centerBrick.getX() + 2, centerBrick.getY()));
-        break;
-      case J:
-        bricks.add(centerBrick);
-        bricks.add(new Brick(centerBrick.getX() - 1, centerBrick.getY()));
-        bricks.add(new Brick(centerBrick.getX(), centerBrick.getY() - 1));
-        bricks.add(new Brick(centerBrick.getX(), centerBrick.getY() - 2));
-        break;
-      case L:
-        bricks.add(centerBrick);
-        bricks.add(new Brick(centerBrick.getX() + 1, centerBrick.getY()));
-        bricks.add(new Brick(centerBrick.getX(), centerBrick.getY() - 1));
-        bricks.add(new Brick(centerBrick.getX(), centerBrick.getY() - 2));
-        break;
-      case O:
-        bricks.add(centerBrick);
-        bricks.add(new Brick(centerBrick.getX() + 1, centerBrick.getY()));
-        bricks.add(new Brick(centerBrick.getX(), centerBrick.getY() - 1));
-        bricks.add(new Brick(centerBrick.getX() + 1, centerBrick.getY() - 1));
-        break;
-      case S:
-        bricks.add(centerBrick);
-        bricks.add(new Brick(centerBrick.getX() - 1, centerBrick.getY()));
-        bricks.add(new Brick(centerBrick.getX(), centerBrick.getY() - 1));
-        bricks.add(new Brick(centerBrick.getX() + 1, centerBrick.getY() - 1));
-        break;
-      case T:
-        bricks.add(centerBrick);
-        bricks.add(new Brick(centerBrick.getX() - 1, centerBrick.getY()));
-        bricks.add(new Brick(centerBrick.getX() + 1, centerBrick.getY()));
-        bricks.add(new Brick(centerBrick.getX(), centerBrick.getY() - 1));
-        break;
-      case Z:
-        bricks.add(centerBrick);
-        bricks.add(new Brick(centerBrick.getX() - 1, centerBrick.getY()));
-        bricks.add(new Brick(centerBrick.getX(), centerBrick.getY() + 1));
-        bricks.add(new Brick(centerBrick.getX() + 1, centerBrick.getY() + 1));
-      default:
-        break;
-    }
+  public Tetromino(Brick b, TetraType type, int rot) {
+    this.centerBrick = b;
+    this.rotation = rot;
+    this.bricks = new ArrayList<>();
+    this.type = type;
+    this.makeTetra();
   }
+
 
   @Override
   public void moveDown() {
@@ -95,6 +84,13 @@ public abstract class Tetromino implements Tetra {
   public void moveRight() {
     for (Brick brick : bricks) {
       brick.moveRight();
+    }
+  }
+
+  @Override
+  public void moveUp() {
+    for (Brick b : bricks) {
+      b.moveUp();
     }
   }
 
@@ -168,9 +164,9 @@ public abstract class Tetromino implements Tetra {
     for (Brick brick : bricks) {
       int x = brick.getX() - centerBrick.getX();
       int y = brick.getY() - centerBrick.getY();
-      int newX = centerBrick.getX() + y;
-      int newY = centerBrick.getY() - x;
-      if (newX < 0 || newX >= board.getWidth() || newY < 0 || newY >= board.getHeight() || board.isOccupied(newX, newY) || y < 0) {
+      int newX = centerBrick.getX() - y;
+      int newY = centerBrick.getY() + x;
+      if (newX < 0 || newX >= board.getWidth() || newY < 0 || newY >= board.getHeight() || board.isOccupied(newX, newY)) {
         return false;
       }
     }
@@ -182,9 +178,9 @@ public abstract class Tetromino implements Tetra {
     for (Brick brick : bricks) {
       int x = brick.getX() - centerBrick.getX();
       int y = brick.getY() - centerBrick.getY();
-      int newX = centerBrick.getX() - y;
-      int newY = centerBrick.getY() + x;
-      if (newX < 0 || newX >= board.getWidth() || newY < 0 || newY >= board.getHeight() || board.isOccupied(newX, newY) || y < 0) {
+      int newX = centerBrick.getX() + y;
+      int newY = centerBrick.getY() - x;
+      if (newX < 0 || newX >= board.getWidth() || newY < 0 || newY >= board.getHeight() || board.isOccupied(newX, newY)) {
         return false;
       }
     }
@@ -197,10 +193,64 @@ public abstract class Tetromino implements Tetra {
   }
 
   @Override
-  public int getY() {
-    return centerBrick.getY();
+  public int getY() { return centerBrick.getY(); }
+
+  @Override
+  public TetraType getType() { return this.type; }
+
+  @Override
+  public int getRotation() { return this.rotation; }
+
+  @Override
+  public boolean hasBeenHeld() {
+    return this.hasBeenHeld;
   }
 
+  @Override
+  public void changeHoldState() {
+    this.hasBeenHeld = !this.hasBeenHeld;
+  }
+
+  @Override
+  public void moveToTop(Board b) {
+    while (this.getY() > 2) {
+      this.moveUp();
+    }
+  }
+
+  @Override
+  public int hashCode() {
+    int hash = 0;
+    for (Brick brick : bricks) {
+      hash += brick.hashCode();
+    }
+    hash += centerBrick.hashCode();
+    hash += rotation * 10;
+
+    if (this.hasBeenHeld) {
+      hash += 100;
+    }
+    return hash;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (o == this) return true;
+    if (o == null) {
+      return false;
+    }
+    if (o instanceof Tetromino) {
+      Tetromino other = (Tetromino) o;
+      return this.bricksEquals(other) && this.centerBrick.equals(other.centerBrick) && this.rotation == other.rotation;
+    }
+    return false;
+  }
+
+  /**
+   * Returns true if the bricks of this tetromino are equal to the bricks of the given tetromino.
+   * @param other the tetromino to compare to
+   * @return true if the bricks of this tetromino are equal to the bricks of the given tetromino
+   */
   private boolean bricksEquals(Tetromino other) {
     for (Brick brick : bricks) {
       boolean found = false;
@@ -217,28 +267,60 @@ public abstract class Tetromino implements Tetra {
     return true;
   }
 
-  @Override
-  public boolean equals(Object o) {
-    if (o == this) return true;
-    if (o == null) {
-      return false;
+  /**
+   * Makes a tetromino based on the center brick and the type of tetromino.
+   */
+  private void makeTetra() {
+    switch (this.type) {
+      case I:
+        bricks.add(this.centerBrick);
+        bricks.add(new Brick(this.centerBrick.getX() - 1, this.centerBrick.getY(), TetraType.I));
+        bricks.add(new Brick(this.centerBrick.getX() + 1, this.centerBrick.getY(), TetraType.I));
+        bricks.add(new Brick(this.centerBrick.getX() + 2, this.centerBrick.getY(), TetraType.I));
+        break;
+      case J:
+        bricks.add(this.centerBrick);
+        bricks.add(new Brick(this.centerBrick.getX() - 1, this.centerBrick.getY(), TetraType.J));
+        bricks.add(new Brick(this.centerBrick.getX(), this.centerBrick.getY() - 1, TetraType.J));
+        bricks.add(new Brick(this.centerBrick.getX(), this.centerBrick.getY() - 2, TetraType.J));
+        break;
+      case L:
+        bricks.add(this.centerBrick);
+        bricks.add(new Brick(this.centerBrick.getX() + 1, this.centerBrick.getY(), TetraType.L));
+        bricks.add(new Brick(this.centerBrick.getX(), this.centerBrick.getY() - 1, TetraType.L));
+        bricks.add(new Brick(this.centerBrick.getX(), this.centerBrick.getY() - 2, TetraType.L));
+        break;
+      case O:
+        bricks.add(this.centerBrick);
+        bricks.add(new Brick(this.centerBrick.getX() + 1, this.centerBrick.getY(), TetraType.O));
+        bricks.add(new Brick(this.centerBrick.getX(), this.centerBrick.getY() - 1, TetraType.O));
+        bricks.add(new Brick(this.centerBrick.getX() + 1, this.centerBrick.getY() - 1, TetraType.O));
+        break;
+      case S:
+        bricks.add(this.centerBrick);
+        bricks.add(new Brick(this.centerBrick.getX() - 1, this.centerBrick.getY(), TetraType.S));
+        bricks.add(new Brick(this.centerBrick.getX(), this.centerBrick.getY() - 1, TetraType.S));
+        bricks.add(new Brick(this.centerBrick.getX() + 1, this.centerBrick.getY() - 1, TetraType.S));
+        break;
+      case T:
+        bricks.add(this.centerBrick);
+        bricks.add(new Brick(this.centerBrick.getX() - 1, this.centerBrick.getY(), TetraType.T));
+        bricks.add(new Brick(this.centerBrick.getX() + 1, this.centerBrick.getY(), TetraType.T));
+        bricks.add(new Brick(this.centerBrick.getX(), this.centerBrick.getY() - 1, TetraType.T));
+        break;
+      case Z:
+        bricks.add(this.centerBrick);
+        bricks.add(new Brick(this.centerBrick.getX() - 1, this.centerBrick.getY(), TetraType.Z));
+        bricks.add(new Brick(this.centerBrick.getX(), this.centerBrick.getY() + 1, TetraType.Z));
+        bricks.add(new Brick(this.centerBrick.getX() + 1, this.centerBrick.getY() + 1, TetraType.Z));
+      default:
+        break;
     }
-    if (o instanceof Tetromino) {
-      Tetromino other = (Tetromino) o;
-      return this.bricksEquals(other) && this.centerBrick.equals(other.centerBrick) && this.rotation == other.rotation;
+    if (this.rotation != 0) {
+      for (int i = 0; i < this.rotation; i++) {
+        this.rotateCW();
+      }
     }
-    return false;
-  }
-
-  @Override
-  public int hashCode() {
-    int hash = 0;
-    for (Brick brick : bricks) {
-      hash += brick.hashCode();
-    }
-    hash += centerBrick.hashCode();
-    hash += rotation * 10;
-    return hash;
   }
 }
 

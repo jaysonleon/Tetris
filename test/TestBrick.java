@@ -5,13 +5,14 @@ import org.junit.Test;
 import model.pieces.Brick;
 import model.pieces.OPiece;
 import model.pieces.Tetra;
+import model.pieces.TetraType;
 
 public class TestBrick {
 
   Brick b;
   @Before
   public void setUp() {
-    b = new Brick(4, 5);
+    b = new Brick(4, 5, TetraType.J);
   }
 
   @Test
@@ -55,7 +56,7 @@ public class TestBrick {
   @Test
   public void testBrickEquals() {
     setUp();
-    Brick b2 = new Brick(4, 5);
+    Brick b2 = new Brick(4, 5, TetraType.I);
     Assert.assertEquals(b, b2);
     Assert.assertNotEquals(b, null);
     Assert.assertNotEquals(b, new OPiece(b));
@@ -65,7 +66,7 @@ public class TestBrick {
   @Test
   public void testBrickHashCode() {
     setUp();
-    Brick b2 = new Brick(4, 5);
+    Brick b2 = new Brick(4, 5, TetraType.I);
     Assert.assertEquals(900, b.hashCode());
     Assert.assertEquals(b.hashCode(), b2.hashCode());
   }

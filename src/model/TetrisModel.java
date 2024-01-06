@@ -2,104 +2,106 @@ package model;
 
 import model.pieces.Tetra;
 
-public class TetrisModel {
-  private Board board;
-  private Tetra currentPiece;
-  private Tetra nextPiece;
-  private int score;
-  private int level;
-  private int linesCleared;
-  private boolean gameOver;
+public interface TetrisModel {
+  /**
+   * Adds the given features to the model.
+   * @param features the features to add
+   */
+  void addFeatures(ModelFeatures features);
 
-  public TetrisModel() {
-    board = new Board(10, 20);
-    currentPiece = TetraFactory.getRandomTetra();
-    nextPiece = TetraFactory.getRandomTetra();
-    score = 0;
-    level = 1;
-    linesCleared = 0;
-    gameOver = false;
-  }
+  /**
+   * Updates the listeners of the model to the current state of the model.
+   */
+  void update();
 
-  public TetrisModel(Board b) {
-    board = b;
-    currentPiece = TetraFactory.getRandomTetra();
-    nextPiece = TetraFactory.getRandomTetra();
-    score = 0;
-    level = 1;
-    linesCleared = 0;
-    gameOver = false;
-  }
+  /**
+   * Moves the current piece down one row.
+   */
+  void moveDown();
 
-  public void moveDown() {
-    if (currentPiece.canMoveDown(board)) {
-      currentPiece.moveDown();
-    } else {
-      board.addPiece(currentPiece);
-//            int lines = board.clearLines();
-//            linesCleared += lines;
-//            score += lines * 100;
-      if (linesCleared >= 10) {
-        level++;
-        linesCleared -= 10;
-      }
-      currentPiece = nextPiece;
-      nextPiece = TetraFactory.getRandomTetra();
-      if (board.isFull(currentPiece)) {
-        gameOver = true;
-      }
-    }
-  }
+  /**
+   * Moves the current piece left one column.
+   */
+  void moveLeft();
 
-  public void moveLeft() {
-    if (currentPiece.canMoveLeft(board)) {
-      currentPiece.moveLeft();
-    }
-  }
+  /**
+   * Moves the current piece right one column.
+   */
+  void moveRight();
 
-  public void moveRight() {
-    if (currentPiece.canMoveRight(board)) {
-      currentPiece.moveRight();
-    }
-  }
+  /**
+   * Rotates the current piece clockwise.
+   */
+  void rotateCW();
 
-  public void rotateCW() {
-    if (currentPiece.canRotateCW(board)) {
-      currentPiece.rotateCW();
-    }
-  }
+  /**
+   * Rotates the current piece counter-clockwise.
+   */
+  void rotateCCW();
 
-  public void rotateCCW() {
-    if (currentPiece.canRotateCCW(board)) {
-      currentPiece.rotateCCW();
-    }
-  }
+  /**
+   * Drops the current piece to the bottom-most position on the board.
+   */
+  void drop();
 
-  public Board getBoard() {
-    return board;
-  }
+  /**
+   * Holds the current piece. A piece can only be held once.
+   */
+  void hold();
 
-  public Tetra getCurrentPiece() {
-    return currentPiece;
-  }
+  /**
+   * Returns the current game board.
+   * @return the current game board
+   */
+  Board getBoard();
 
-  public Tetra getNextPiece() {
-    return nextPiece;
-  }
+  /**
+   * Returns the current piece.
+   * @return the current piece
+   */
+  Tetra getCurrentPiece();
 
-  public int getScore() {
-    return score;
-  }
+  /**
+   * Returns the next piece.
+   * @return the next piece
+   */
+  Tetra getNextPiece();
 
-  public int getLevel() {
-    return level;
-  }
+  /**
+   * Returns the held piece
+   * @return the held piece, or {@code null} if no piece is held
+   */
+   Tetra getHoldPiece();
 
-  public boolean isGameOver() {
-    return gameOver;
-  }
+  /**
+   * Returns the score.
+   * @return the score
+   */
+  int getScore();
 
-  public void setCurrentPiece(Tetra currentPiece) {
-    this.currentPiece = currentPiece;
-  }
+  /**
+   * Returns the current level.
+   * @return the current level
+   */
+  int getLevel();
+
+  /**
+   * Returns whether the game is over. The game is over when a brick on the board
+   * reaches the top of the board.
+   * @return whether the game is over
+   */
+  boolean isGameOver();
+
+  /**
+   * Set the currentPiece of this model to the given piece.
+   * @param currentPiece the piece to set the currentPiece to
+   */
+  void setCurrentPiece(Tetra currentPiece);
+
+  /**
+   * Calculate the number of points for a soft drop from the currentPiece's
+   * current position. The number of points is equal to the number of bricks the
+   * piece drops by.
+   */
+  void calcPointsSoftDrop();
 }

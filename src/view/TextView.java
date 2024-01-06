@@ -1,16 +1,20 @@
 package view;
 
 import model.Board;
-import model.TetrisModel;
+import model.TetrisModelImpl;
 
+/**
+ * Represents a text-based view of the game.
+ */
 public class TextView implements TextualView {
+  //
   private final Board board;
 
   public TextView(Board board) {
     this.board = board;
   }
 
-  public TextView(TetrisModel model) {
+  public TextView(TetrisModelImpl model) {
     this.board = model.getBoard();
   }
 
