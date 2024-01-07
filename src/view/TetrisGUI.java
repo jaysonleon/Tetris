@@ -11,31 +11,31 @@ import model.TetrisModelImpl;
 
 import static java.awt.event.KeyEvent.VK_LEFT;
 
+/**
+ * Represents the main frame of the Tetris game.
+ */
 public class TetrisGUI extends JFrame implements TetrisView {
 
-  JPanel nextPiece, score, holdPiece, sidePanel1, sidePanel2;
+  JPanel sidePanel1, sidePanel2;
   TetrisPanel panel;
 
+  /**
+   * Constructs a new TetrisGUI object.
+   * @param m the model to be used
+   */
   public TetrisGUI(TetrisModelImpl m) {
     super("Tetris");
     setFocusable(true);
-//    setResizable(false);
+    setResizable(false);
 
+    this.setBackground(Color.BLACK);
     this.setLayout(new BorderLayout());
 
     panel = new TetrisPanel(m);
-    add(panel, BorderLayout.CENTER);
-
-//    nextPiece = new NextPiecePanel(m);
-//    score = new ScorePanel(m);
-//    holdPiece = new HoldPanel(m);
-//
-//    add(nextPiece, BorderLayout.EAST);
-//    add(score, BorderLayout.NORTH);
-//    add(holdPiece, BorderLayout.WEST);
-
     sidePanel1 = new SidePanel1(m);
     sidePanel2 = new SidePanel2(m);
+
+    add(panel, BorderLayout.CENTER);
     add(sidePanel1, BorderLayout.EAST);
     add(sidePanel2, BorderLayout.WEST);
 
@@ -81,8 +81,13 @@ public class TetrisGUI extends JFrame implements TetrisView {
 
       @Override
       public void keyPressed(KeyEvent e) {
-        if (e.getKeyChar() == 's' || e.getKeyChar() == 'S') {
-          features.calcPointsSoftDrop();
+        switch (e.getKeyChar()) {
+          case 's', 'S':
+            features.moveDown();
+            features.calcPointsSoftDrop();
+            break;
+          default:
+            break;
         }
       }
 
@@ -104,6 +109,4 @@ public class TetrisGUI extends JFrame implements TetrisView {
   public void showMessage(String message) {
     panel.showMessage(message);
   }
-
-
 }

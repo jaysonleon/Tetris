@@ -46,7 +46,7 @@ public class TetraFactory {
       case 4:
         return new SPiece(new Brick(4, 1, TetraType.S));
       case 5:
-        return new TPiece(new Brick(4, 0, TetraType.T));
+        return new TPiece(new Brick(4, 1, TetraType.T));
       case 6:
         return new ZPiece(new Brick(4, 0, TetraType.Z));
       default:

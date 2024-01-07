@@ -21,7 +21,7 @@ public class TetrisModelImpl implements TetrisModel {
   private int score;
   // The level
   private int level;
-  // The number of lines cleared
+  // The number of lines cleared this level. When this reaches 10, the level increases by 1.
   private int linesCleared;
   // True if the game is over, false otherwise
   private boolean gameOver;
@@ -72,6 +72,13 @@ public class TetrisModelImpl implements TetrisModel {
   }
 
   @Override
+  public void updateLevel() {
+    for (ModelFeatures listener : listeners) {
+      listener.updateLevel();
+    }
+  }
+
+  @Override
   public void moveDown() {
     if (gameOver) {
       throw new IllegalStateException("Game is over.");
@@ -87,6 +94,7 @@ public class TetrisModelImpl implements TetrisModel {
       if (linesCleared >= 10) {
         level++;
         this.update();
+        this.updateLevel();
         linesCleared -= 10;
       }
       currentPiece = nextPiece;
@@ -171,6 +179,11 @@ public class TetrisModelImpl implements TetrisModel {
   }
 
   @Override
+  public int getLinesCleared() {
+    return linesCleared;
+  }
+
+  @Override
   public boolean isGameOver() {
     if (board.isFull()) {
       gameOver = true;
@@ -204,7 +217,7 @@ public class TetrisModelImpl implements TetrisModel {
       throw new IllegalStateException("Game is over.");
     }
     if (this.holdPiece == null && !this.currentPiece.hasBeenHeld()) {
-      this.currentPiece.moveToTop(board);
+      this.currentPiece.resetPosition(board);
       this.currentPiece.changeHoldState();
       this.holdPiece = this.currentPiece;
       this.currentPiece = this.nextPiece;
@@ -213,7 +226,7 @@ public class TetrisModelImpl implements TetrisModel {
       if (this.currentPiece.hasBeenHeld()) {
         return;
       } else {
-        this.currentPiece.moveToTop(board);
+        this.currentPiece.resetPosition(board);
         this.currentPiece.changeHoldState();
         Tetra temp = this.currentPiece;
         this.currentPiece = this.holdPiece;

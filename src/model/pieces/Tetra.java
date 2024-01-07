@@ -122,10 +122,15 @@ public interface Tetra {
    */
   public void changeHoldState();
 
+
+//  public void moveToTop(Board b);
+//
+//  public void moveToMiddle(Board b);
+
   /**
-   * Move this tetra to the top of the given board.
-   * @param b the board used to align the piece
+   * Resets the position of this tetra to the top and middle of the board.
+   * @param b the board used to reset the position of the piece
    */
-  public void moveToTop(Board b);
+  public void resetPosition(Board b);
 
 }

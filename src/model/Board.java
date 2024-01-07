@@ -103,22 +103,6 @@ public class Board {
     }
 
     return ans;
-
-//    for (int i = 0; i < this.width; i++) {
-//      for (int j = 0; j < this.height; j++) {
-//        if (this.isOccupied(i, j)) {
-//          Brick b = this.getBrickAt(i, j);
-//          if (b.getY() == 0) {
-//            ans = true;
-//            break;
-//          } else {
-//            ans = false;
-//          }
-//        }
-//      }
-//    }
-//
-//    return ans;
   }
 
   /**
@@ -165,74 +149,5 @@ public class Board {
         }
       }
     }
-  }
-
-  /**
-   * Returns the y coordinate of the lowest possible position this tetra can move without moving left or right,
-   * or rotating (i.e. the lowest possible position this tetra can move without colliding with another tetra).
-   *
-   * @param t the tetra to check
-   * @return the y coordinate of the lowest possible position this tetra can move without moving left or right,
-   */
-  public int findDistToBottom(Tetra t) {
-    List<Integer> xCoords = this.getXCoords(t);
-    List<Integer> answers = new ArrayList<>();
-    int x;
-    int ans = 0;
-
-
-    for (Integer i : xCoords) {
-      x = i;
-      for (int j = this.getHeight() - 1; j >= 0; j--) {
-        if (!this.isOccupied(x, j)) {
-
-        }
-      }
-
-
-      for (int j = 0; j < this.getHeight() - 1; j++) {
-        if (this.isOccupied(x, j)) {
-          answers.add(j);
-        } else {
-          ans += 1;
-        }
-
-      }
-
-
-    }
-    return ans;
-  }
-
-
-//    int dist = 0;
-//    for (Brick b : t.getBricks()) {
-//      int x = b.getX();
-//      int y = b.getY();
-//      while (y < this.getHeight() - 1 && !this.isOccupied(x, y + 1)) {
-//        y += 1;
-//      }
-//      if (this.isOccupied(x, y)) {
-//        y -= 1;
-//      } else {
-//        dist = y;
-//      }
-//    }
-//
-//    return dist;
-
-  private List<Integer> getXCoords(Tetra t) {
-    List<Integer> xCoords = new ArrayList<>();
-    for (Brick b : t.getBricks()) {
-      int x = b.getX();
-      int y = b.getY();
-      if (xCoords.contains(x)) {
-        continue;
-      } else {
-        xCoords.add(x);
-      }
-    }
-
-    return xCoords;
   }
 }

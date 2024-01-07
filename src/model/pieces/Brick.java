@@ -68,7 +68,7 @@ public class Brick {
    * Returns the type of tetra this brick belongs to.
    * @return the type of tetra this brick belongs to
    */
-  public TetraType getTetraType() {
+  public TetraType getType() {
     return type;
   }
 

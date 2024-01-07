@@ -211,10 +211,34 @@ public abstract class Tetromino implements Tetra {
     this.hasBeenHeld = !this.hasBeenHeld;
   }
 
+
   @Override
-  public void moveToTop(Board b) {
+  public void resetPosition(Board b) {
+    this.moveToTop(b);
+    this.moveToMiddle(b);
+  }
+
+  /**
+   * Move this tetra to the top of the given board.
+   * @param b the board used to align the piece
+   */
+  private void moveToTop(Board b) {
     while (this.getY() > 2) {
       this.moveUp();
+    }
+  }
+
+  /**
+   * Move this tetra to the middle of the given board.
+   * @param b the board used to align the piece
+   */
+  private void moveToMiddle(Board b) {
+    while (this.getX() != 4) {
+      if (this.getX() > 4) {
+        this.moveLeft();
+      } else {
+        this.moveRight();
+      }
     }
   }
 

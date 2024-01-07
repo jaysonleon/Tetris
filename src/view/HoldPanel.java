@@ -8,9 +8,16 @@ import model.TetrisModelImpl;
 import model.pieces.Brick;
 import model.pieces.Tetra;
 
+/**
+ * Represents the drawing panel for the hold piece.
+ */
 public class HoldPanel extends JPanel {
   private final TetrisModelImpl model;
 
+  /**
+   * Constructs a new HoldPanel.
+   * @param model the model to be used
+   */
   public HoldPanel(TetrisModelImpl model) {
     this.model = model;
   }
@@ -23,10 +30,10 @@ public class HoldPanel extends JPanel {
     g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
         RenderingHints.VALUE_ANTIALIAS_ON);
 
-    this.setBackground(Color.WHITE);
+    this.setBackground(Color.BLACK);
 
-    g2d.setColor(Color.BLACK);
-    g2d.drawRect(0, 0, 100, 100);
+    g2d.setColor(Color.WHITE);
+    g2d.drawRect(0, 0, 125, 100);
 
     g2d.translate(50, 50);
 
@@ -40,16 +47,21 @@ public class HoldPanel extends JPanel {
 
   @Override
   public Dimension getPreferredSize() {
-    return new Dimension(100, 100);
+    return new Dimension(125, 100);
   }
 
+  /**
+   * Draws the given tetra.
+   * @param g the graphics object
+   * @param t the tetra to be drawn
+   */
   private void drawTetra(Graphics2D g, Tetra t) {
     Color c = TetrisPanel.determineColor(t);
     for (Brick b : t.getBricks()) {
       Brick center = t.getCenterBrick();
       int x = b.getX() - center.getX();
       int y = b.getY() - center.getY();
-      g.setColor(Color.BLACK);
+      g.setColor(Color.WHITE);
       g.drawRect(x * 15,y * 15,15, 15);
       g.setColor(c);
       g.fillRect(x * 15, y * 15,15, 15);

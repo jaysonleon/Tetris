@@ -8,9 +8,16 @@ import model.TetrisModelImpl;
 import model.pieces.Brick;
 import model.pieces.Tetra;
 
+/**
+ * Represents the main drawing panel for the Tetris game. Draws the board and the current piece.
+ */
 public class TetrisPanel extends JPanel {
   private final TetrisModelImpl model;
 
+  /**
+   * Constructs a new TetrisPanel.
+   * @param model the model to be used
+   */
   public TetrisPanel(TetrisModelImpl model) {
     this.model = model;
   }
@@ -20,6 +27,7 @@ public class TetrisPanel extends JPanel {
     super.paintComponent(g);
 
     Graphics2D g2d = (Graphics2D) g;
+    this.setBackground(Color.BLACK);
     g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
     drawBoard(g2d);
 
@@ -27,18 +35,22 @@ public class TetrisPanel extends JPanel {
     this.drawTetra(g2d, t);
   }
 
+  /**
+   * Draws the board.
+   * @param g2d the graphics object
+   */
   private void drawBoard(Graphics2D g2d) {
+    // draw the grid lines
     for (int y = 0; y < model.getBoard().getHeight(); y++) {
       for (int x = 0; x < model.getBoard().getWidth(); x++) {
-        g2d.setColor(Color.BLACK);
-        g2d.drawRect(x * 20, y * 20, 20, 20);
         g2d.setColor(Color.WHITE);
-        g2d.fillRect(x * 20, y * 20, 20, 20);
+        g2d.drawRect(x * 20, y * 20, 20, 20);
 
+        // draw the bricks, if present on the board
         if (model.getBoard().isOccupied(x, y)) {
           Brick b = model.getBoard().getBrickAt(x, y);
           Color c = determineColor(b);
-          g2d.setColor(Color.BLACK);
+          g2d.setColor(Color.WHITE);
           g2d.drawRect(x * 20, y * 20, 20, 20);
           g2d.setColor(c);
           g2d.fillRect(x * 20, y * 20, 20, 20);
@@ -52,10 +64,15 @@ public class TetrisPanel extends JPanel {
     return new Dimension(200, 400);
   }
 
+  /**
+   * Draws the given tetra.
+   * @param g the graphics object
+   * @param t the tetra to be drawn
+   */
   private void drawTetra(Graphics2D g, Tetra t) {
-    Color c = this.determineColor(t);
+    Color c = determineColor(t);
     for (Brick b : t.getBricks()) {
-      g.setColor(Color.BLACK);
+      g.setColor(Color.WHITE);
       g.drawRect(b.getX() * 20, b.getY() * 20, 20, 20);
       g.setColor(c);
       g.fillRect(b.getX() * 20, b.getY() * 20, 20, 20);
@@ -63,31 +80,28 @@ public class TetrisPanel extends JPanel {
 
   }
 
+  /**
+   * Determines the color of the given tetra.
+   * @param t the tetra to be checked
+   * @return the color of the tetra
+   */
   public static Color determineColor(Tetra t) {
     return determineColor(t.getCenterBrick());
   }
 
+  /**
+   * Determines the color of the given brick.
+   * @param b the brick to be checked
+   * @return the color of the brick
+   */
   public static Color determineColor(Brick b) {
-    switch (b.getTetraType()) {
-      case I:
-        return Color.CYAN;
-      case J:
-        return Color.BLUE;
-      case L:
-        return Color.ORANGE;
-      case O:
-        return Color.YELLOW;
-      case S:
-        return Color.GREEN;
-      case T:
-        return new Color(120, 7, 203);
-      case Z:
-        return Color.RED;
-      default:
-        throw new IllegalArgumentException("Invalid Tetra type");
-    }
+    return b.getType().getColor();
   }
 
+  /**
+   * Shows the given message in a popup.
+   * @param message the message to be shown
+   */
   public void showMessage(String message) {
     JOptionPane.showMessageDialog(this, message);
   }

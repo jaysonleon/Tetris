@@ -14,6 +14,8 @@ public interface TetrisModel {
    */
   void update();
 
+  void updateLevel();
+
   /**
    * Moves the current piece down one row.
    */
@@ -84,6 +86,12 @@ public interface TetrisModel {
    * @return the current level
    */
   int getLevel();
+
+  /**
+   * Returns the number of lines cleared.
+   * @return the number of lines cleared
+   */
+  int getLinesCleared();
 
   /**
    * Returns whether the game is over. The game is over when a brick on the board

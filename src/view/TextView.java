@@ -10,10 +10,18 @@ public class TextView implements TextualView {
   //
   private final Board board;
 
+  /**
+   * Constructs a new TextView.
+   * @param board the board to be used
+   */
   public TextView(Board board) {
     this.board = board;
   }
 
+  /**
+   * Constructs a new TextView.
+   * @param model the model to be used
+   */
   public TextView(TetrisModelImpl model) {
     this.board = model.getBoard();
   }
