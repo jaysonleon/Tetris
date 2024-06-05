@@ -9,8 +9,6 @@ import javax.swing.*;
 import controller.ViewFeatures;
 import model.TetrisModelImpl;
 
-import static java.awt.event.KeyEvent.VK_LEFT;
-
 /**
  * Represents the main frame of the Tetris game.
  */

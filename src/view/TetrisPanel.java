@@ -26,6 +26,7 @@ public class TetrisPanel extends JPanel {
   public void paintComponent(Graphics g) {
     super.paintComponent(g);
 
+    this.setBackground(Color.BLACK);
     Graphics2D g2d = (Graphics2D) g;
     this.setBackground(Color.BLACK);
     g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -44,7 +45,11 @@ public class TetrisPanel extends JPanel {
     for (int y = 0; y < model.getBoard().getHeight(); y++) {
       for (int x = 0; x < model.getBoard().getWidth(); x++) {
         g2d.setColor(Color.WHITE);
+<<<<<<< Updated upstream
         g2d.drawRect(x * 20, y * 20, 20, 20);
+=======
+        g2d.drawRect(x * 20, y * 20, 20, 20)
+>>>>>>> Stashed changes
 
         // draw the bricks, if present on the board
         if (model.getBoard().isOccupied(x, y)) {
