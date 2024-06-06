@@ -58,6 +58,13 @@ public interface TetrisModel {
    */
   void receiveLines(int num); 
 
+  /** 
+   * Send the given number of lines to an opponent.
+   * 
+   * @param num the number of lines to send
+   */
+  void sendLines(int num); 
+
   /**
    * Returns the current game board.
    * @return the current game board

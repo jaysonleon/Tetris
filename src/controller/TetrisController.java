@@ -17,6 +17,7 @@ public class TetrisController implements ViewFeatures, ModelFeatures {
   private final TetrisView view;
   private Timer timer;
   private Difficulty diff;
+  private Random rand; 
 
   // the current delay between ticks of the timer
   private int period;
@@ -30,6 +31,7 @@ public class TetrisController implements ViewFeatures, ModelFeatures {
     this.view = view;
     this.diff = selectDifficulty(diff);
     this.oppModels = opps;
+    rand = new Random(); 
     view.addFeatures(this);
     model.addFeatures(this);
 
@@ -85,7 +87,18 @@ public class TetrisController implements ViewFeatures, ModelFeatures {
     try {
       boolean gameStarted = true;
       while (gameStarted) {
+        int playersLeft; 
+        playersLeft = oppModels.size();
         if (pModel.isGameOver()) {
+          view.showMessage("Game Over!");
+          gameStarted = false;
+        }
+        for (TetrisModel oppModel : oppModels) {
+          if (oppModel.isGameOver()) {
+            playersLeft--;
+          }
+        }
+        if (playersLeft == 0) {
           view.showMessage("Game Over!");
           gameStarted = false;
         }
@@ -107,11 +120,16 @@ public class TetrisController implements ViewFeatures, ModelFeatures {
   }
 
   private Difficulty selectDifficulty(String diff) {
-    return switch (diff.toLowerCase()) {
-      case "medium", "m" -> Difficulty.MEDIUM;
-      case "hard", "h" -> Difficulty.HARD;
-      default -> Difficulty.EASY;
-    };
+    switch (diff.toLowerCase()) {
+      case "medium":
+      case "m":
+        return Difficulty.MEDIUM;
+      case "hard":
+      case "h":
+        return Difficulty.HARD;
+      default:
+        return Difficulty.EASY;
+    }
   }
 
   @Override
@@ -147,13 +165,16 @@ public class TetrisController implements ViewFeatures, ModelFeatures {
 
   @Override 
   public void updateAndSend(int num) {
+    if (pModel.isGameOver()) {
+      throw new IllegalStateException("Game is over.");
+    } else { 
     view.updateView();
     // pick (random) opponent model to send lines to 
-    Random rand = new Random();
-    TetrisModel oppModel = oppModels.get(rand.nextInt(oppModels.size() - 1));
+    TetrisModel oppModel = oppModels.get(rand.nextInt(oppModels.size()));
     // send lines to the model 
     oppModel.receiveLines(num); 
     // update the appropriate view with the number of lines to send
     view.sendLines(num);
+    }
   }
 }

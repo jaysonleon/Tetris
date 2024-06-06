@@ -69,16 +69,41 @@ public class TetrisModelImpl implements TetrisModel {
 
   @Override
   public void update() {
+    if (gameOver) {
+      throw new IllegalStateException("Game is over.");
+    } else {
     for (ModelFeatures listener : listeners) {
       listener.updateView();
+      }
     }
   }
 
   @Override
   public void updateLevel() {
+    if (gameOver) {
+      throw new IllegalStateException("Game is over.");
+    } else {
     for (ModelFeatures listener : listeners) {
       listener.updateLevel();
+      }
     }
+  }
+
+  @Override 
+  public void sendLines(int num) {
+    if (gameOver) {
+      throw new IllegalStateException("Game is over.");
+    } else {
+    for (ModelFeatures listener : listeners) {
+      listener.updateAndSend(num);
+      } 
+    }
+  }
+
+  @Override 
+  public void receiveLines(int num) {
+    this.linesReceived += num;
+    System.out.println("Lines received: " + num);
   }
 
   @Override
@@ -86,6 +111,7 @@ public class TetrisModelImpl implements TetrisModel {
     if (gameOver) {
       throw new IllegalStateException("Game is over.");
     }
+    int linesToSend = 0; 
     if (currentPiece.canMoveDown(board)) {
       currentPiece.moveDown();
       this.update();
@@ -100,18 +126,19 @@ public class TetrisModelImpl implements TetrisModel {
         this.updateLevel();
         linesCleared -= 10;
       }
-      if (lines > 1) {
+      if (lines > 0) {
         this.streak += lines; 
-        if (this.streak > 3) {
-          
-        }
+        if (this.streak > 1 && this.streak != 0) {
+          linesToSend += lines; 
+        } 
       } else {
         this.streak = 0;
+        linesToSend = 0; 
       }
-
       currentPiece = nextPiece;
       nextPiece = TetraFactory.getRandomTetra();
       this.isGameOver();
+      this.sendLines(linesToSend);
       this.update();
     }
   }
@@ -158,12 +185,6 @@ public class TetrisModelImpl implements TetrisModel {
       currentPiece.rotateCCW();
     }
     this.update();
-  }
-
-  @Override 
-  public void receiveLines(int num) {
-    this.linesReceived += num;
-    System.out.println("Lines received: " + this.linesReceived);
   }
 
   @Override

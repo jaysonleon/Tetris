@@ -1,7 +1,6 @@
 package view;
 
 import java.awt.*;
-import java.awt.RenderingHints.Key;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
@@ -48,29 +47,37 @@ public class TetrisGUI extends JFrame implements TetrisView {
     this.addKeyListener(new KeyListener() {
       @Override
       public void keyTyped(KeyEvent e) {
-        switch (e.getKeyChar()) {
-          case 'a', 'A':
+        char keyChar = Character.toLowerCase(e.getKeyChar());
+        switch (keyChar) {
+          case 'a':
+          case 'A':
             features.moveLeft();
             break;
-          case 'd', 'D':
+          case 'd':
+          case 'D':
             features.moveRight();
             break;
-          case 's', 'S':
+          case 's':
+          case 'S':
             features.moveDown();
             break;
-          case 'z', 'Z':
+          case 'z':
+          case 'Z':
             features.rotateCCW();
             break;
-          case 'x', 'X':
+          case 'x':
+          case 'X':
             features.rotateCW();
             break;
-          case 'c', 'C':
+          case 'c':
+          case 'C':
             features.hold();
             break;
           case ' ':
             features.drop();
             break;
-          case 'q', 'Q':
+          case 'q':
+          case 'Q':
             features.exitProgram();
             break;
           default:
@@ -80,14 +87,17 @@ public class TetrisGUI extends JFrame implements TetrisView {
 
       @Override
       public void keyPressed(KeyEvent e) {
-        switch (e.getKeyCode()) {
+        int keyCode = e.getKeyCode();
+        switch (keyCode) {
           case KeyEvent.VK_LEFT:
             features.moveLeft();
             break;
           case KeyEvent.VK_RIGHT:
             features.moveRight();
             break;
-          case 's', 'S', KeyEvent.VK_DOWN:
+          case KeyEvent.VK_DOWN:
+          case 's':
+          case 'S':
             features.moveDown();
             features.calcPointsSoftDrop();
             break;

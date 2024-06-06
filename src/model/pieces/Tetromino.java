@@ -291,11 +291,11 @@ public abstract class Tetromino implements Tetra {
     return false;
   }
 
-  public void changePType(Tetra t, PieceType type) {
-    for (Brick b : t.getBricks()) {
-      b.setPType(type);
-    }
-  }
+  // public void changePType(Tetra t, PieceType type) {
+  //   for (Brick b : t.getBricks()) {
+  //     b.setPType(type);
+  //   }
+  // }
 
   /**
    * Returns true if the bricks of this tetromino are equal to the bricks of the given tetromino.
