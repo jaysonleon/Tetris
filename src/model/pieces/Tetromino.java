@@ -19,6 +19,8 @@ public abstract class Tetromino implements Tetra {
   private final TetraType type;
   // True if this tetra has been held, false otherwise
   private boolean hasBeenHeld;
+  // Represents if a piece is sent from another player or from the native game 
+  // private final PieceType pieceType;
 
   /**
    * Constructs a tetromino with the given bricks and type. Used primarily for testing.
@@ -34,6 +36,11 @@ public abstract class Tetromino implements Tetra {
     this.hasBeenHeld = false;
   }
 
+  /** 
+   * Constructs a tetromino with the given tetra.
+   * 
+   * @param t the tetra to construct the tetromino from
+   */
   public Tetromino(Tetra t) {
     this.bricks = List.of(t.getBricks());
     this.rotation = t.getRotation();
@@ -57,14 +64,28 @@ public abstract class Tetromino implements Tetra {
     this.makeTetra();
   }
 
+  /** 
+   * Constructs a tetromino with the given center brick, type, and rotation.
+   * 
+   * @param b the center brick of the tetromino
+   * @param type the type of tetromino
+   * @param rot the rotation of the tetromino
+   */
   public Tetromino(Brick b, TetraType type, int rot) {
     this.centerBrick = b;
     this.rotation = rot;
     this.bricks = new ArrayList<>();
-    this.type = type;
+    this.type = type; 
     this.makeTetra();
   }
 
+  public Tetromino(Tetra t, PieceType type) {
+    this.bricks = List.of(t.getBricks());
+    this.rotation = t.getRotation();
+    this.centerBrick = t.getCenterBrick();
+    this.type = t.getType();
+    this.hasBeenHeld = t.hasBeenHeld();
+  }
 
   @Override
   public void moveDown() {
@@ -268,6 +289,12 @@ public abstract class Tetromino implements Tetra {
       return this.bricksEquals(other) && this.centerBrick.equals(other.centerBrick) && this.rotation == other.rotation;
     }
     return false;
+  }
+
+  public void changePType(Tetra t, PieceType type) {
+    for (Brick b : t.getBricks()) {
+      b.setPType(type);
+    }
   }
 
   /**

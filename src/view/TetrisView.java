@@ -22,4 +22,10 @@ public interface TetrisView {
    * @param message the message to be shown
    */
   void showMessage(String message);
+
+  /**
+   * Sends the given number of lines to the opponent.
+   * @param num the number of lines to be sent
+   */
+  void sendLines(int num);
 }

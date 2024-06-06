@@ -1,15 +1,19 @@
 package controller;
 
+import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.Random;
 
 import model.ModelFeatures;
-import model.TetrisModelImpl;
+import model.TetrisModel;
 import view.TetrisView;
 
 public class TetrisController implements ViewFeatures, ModelFeatures {
-
-  private final TetrisModelImpl model;
+  // represents the player's game model 
+  private final TetrisModel pModel;
+  // represents the opponent's game model(s)
+  private ArrayList<TetrisModel> oppModels; 
   private final TetrisView view;
   private Timer timer;
   private Difficulty diff;
@@ -17,14 +21,15 @@ public class TetrisController implements ViewFeatures, ModelFeatures {
   // the current delay between ticks of the timer
   private int period;
 
-  public TetrisController(TetrisModelImpl model, TetrisView view) {
-    this(model, view, "easy");
+  public TetrisController(TetrisModel model, TetrisView view) {
+    this(model, view, "easy", null);
   }
 
-  public TetrisController(TetrisModelImpl model, TetrisView view, String diff) {
-    this.model = model;
+  public TetrisController(TetrisModel model, TetrisView view, String diff, ArrayList<TetrisModel> opps) {
+    this.pModel = model;
     this.view = view;
     this.diff = selectDifficulty(diff);
+    this.oppModels = opps;
     view.addFeatures(this);
     model.addFeatures(this);
 
@@ -44,43 +49,43 @@ public class TetrisController implements ViewFeatures, ModelFeatures {
 
   @Override
   public void moveLeft() {
-    model.moveLeft();
+    pModel.moveLeft();
   }
 
   @Override
   public void moveRight() {
-    model.moveRight();
+    pModel.moveRight();
   }
 
   @Override
   public void moveDown() {
-    model.moveDown();
+    pModel.moveDown();
   }
 
   @Override
   public void rotateCW() {
-    model.rotateCW();
+    pModel.rotateCW();
   }
 
   @Override
   public void rotateCCW() {
-    model.rotateCCW();
+    pModel.rotateCCW();
   }
 
   @Override
   public void drop() {
-    model.drop();
+    pModel.drop();
   }
 
   @Override
-  public void hold() { model.hold(); }
+  public void hold() { pModel.hold(); }
 
   @Override
   public void run() {
     try {
       boolean gameStarted = true;
       while (gameStarted) {
-        if (model.isGameOver()) {
+        if (pModel.isGameOver()) {
           view.showMessage("Game Over!");
           gameStarted = false;
         }
@@ -111,12 +116,12 @@ public class TetrisController implements ViewFeatures, ModelFeatures {
 
   @Override
   public void calcPointsSoftDrop() {
-    model.calcPointsSoftDrop();
+    pModel.calcPointsSoftDrop();
   }
 
   @Override
   public void updateLevel() {
-    int i = model.getLevel();
+    int i = pModel.getLevel();
     int diff = this.diff.getDelay();
     this.period = diff - ((i - 1) * diff / 20);
 
@@ -132,11 +137,23 @@ public class TetrisController implements ViewFeatures, ModelFeatures {
       timer.schedule(new TimerTask() {
         @Override
         public void run() {
-          if (!model.isGameOver()) {
-            model.moveDown();
+          if (!pModel.isGameOver()) {
+            pModel.moveDown();
           }
         }
       }, 0, this.period);
     }
+  }
+
+  @Override 
+  public void updateAndSend(int num) {
+    view.updateView();
+    // pick (random) opponent model to send lines to 
+    Random rand = new Random();
+    TetrisModel oppModel = oppModels.get(rand.nextInt(oppModels.size() - 1));
+    // send lines to the model 
+    oppModel.receiveLines(num); 
+    // update the appropriate view with the number of lines to send
+    view.sendLines(num);
   }
 }

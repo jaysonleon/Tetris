@@ -1,13 +1,14 @@
 package view;
 
 import java.awt.*;
+import java.awt.RenderingHints.Key;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 import javax.swing.*;
 
 import controller.ViewFeatures;
-import model.TetrisModelImpl;
+import model.TetrisModel;
 
 /**
  * Represents the main frame of the Tetris game.
@@ -21,7 +22,7 @@ public class TetrisGUI extends JFrame implements TetrisView {
    * Constructs a new TetrisGUI object.
    * @param m the model to be used
    */
-  public TetrisGUI(TetrisModelImpl m) {
+  public TetrisGUI(TetrisModel m) {
     super("Tetris");
     setFocusable(true);
     setResizable(false);
@@ -79,10 +80,19 @@ public class TetrisGUI extends JFrame implements TetrisView {
 
       @Override
       public void keyPressed(KeyEvent e) {
-        switch (e.getKeyChar()) {
-          case 's', 'S':
+        switch (e.getKeyCode()) {
+          case KeyEvent.VK_LEFT:
+            features.moveLeft();
+            break;
+          case KeyEvent.VK_RIGHT:
+            features.moveRight();
+            break;
+          case 's', 'S', KeyEvent.VK_DOWN:
             features.moveDown();
             features.calcPointsSoftDrop();
+            break;
+          case KeyEvent.VK_UP:
+            features.rotateCW();
             break;
           default:
             break;
@@ -99,6 +109,13 @@ public class TetrisGUI extends JFrame implements TetrisView {
   @Override
   public void updateView() {
     panel.repaint();
+    sidePanel1.repaint();
+    sidePanel2.repaint();
+  }
+
+  @Override
+  public void sendLines(int lines) {
+    panel.repaint(); 
     sidePanel1.repaint();
     sidePanel2.repaint();
   }

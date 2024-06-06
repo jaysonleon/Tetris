@@ -4,7 +4,7 @@ import java.awt.*;
 
 import javax.swing.*;
 
-import model.TetrisModelImpl;
+import model.TetrisModel;
 import model.pieces.Brick;
 import model.pieces.Tetra;
 
@@ -14,9 +14,9 @@ import static view.TetrisPanel.determineColor;
  * Represents the drawing panel for the next piece.
  */
 public class NextPiecePanel extends JPanel {
-  private final TetrisModelImpl model;
+  private final TetrisModel model;
 
-  public NextPiecePanel(TetrisModelImpl model) {
+  public NextPiecePanel(TetrisModel model) {
     this.model = model;
   }
 

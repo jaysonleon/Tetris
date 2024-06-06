@@ -4,7 +4,7 @@ import java.awt.*;
 
 import javax.swing.*;
 
-import model.TetrisModelImpl;
+import model.TetrisModel;
 
 /**
  * Represents the drawing panel for the right side of the GUI. Contains the NextPiecePanel, its label,
@@ -15,7 +15,7 @@ public class SidePanel1 extends JPanel {
    * Constructs a new SidePanel1.
    * @param model the model to be used
    */
-  public SidePanel1(TetrisModelImpl model) {
+  public SidePanel1(TetrisModel model) {
     this.setLayout(new BorderLayout());
 
     this.setBackground(Color.BLACK);

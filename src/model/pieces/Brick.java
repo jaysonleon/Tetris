@@ -1,5 +1,7 @@
 package model.pieces;
 
+import model.pieces.TetraType;
+
 /**
  * Represents a brick in the tetris game. A tetra is made up of 4 bricks.
  * A brick has a position and a type.
@@ -9,6 +11,8 @@ public class Brick {
   private int x, y;
   // type of tetra the brick belongs to
   private final TetraType type;
+  // Player .... 
+  private PieceType pType; 
 
   /**
    * Constructs a brick with the given position and type.
@@ -20,6 +24,7 @@ public class Brick {
     this.x = x;
     this.y = y;
     this.type = type;
+    this.pType = PieceType.PLAYER;
   }
 
   /**
@@ -70,6 +75,10 @@ public class Brick {
    */
   public TetraType getType() {
     return type;
+  }
+
+  public void setPType(PieceType type) {
+    this.pType = type;
   }
 
   /**

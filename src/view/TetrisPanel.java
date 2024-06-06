@@ -4,7 +4,8 @@ import java.awt.*;
 
 import javax.swing.*;
 
-import model.TetrisModelImpl;
+import model.TetrisModel;
+
 import model.pieces.Brick;
 import model.pieces.Tetra;
 
@@ -12,14 +13,14 @@ import model.pieces.Tetra;
  * Represents the main drawing panel for the Tetris game. Draws the board and the current piece.
  */
 public class TetrisPanel extends JPanel {
-  private final TetrisModelImpl model;
+  private final TetrisModel model;
 
   /**
    * Constructs a new TetrisPanel.
-   * @param model the model to be used
+   * @param m the model to be used
    */
-  public TetrisPanel(TetrisModelImpl model) {
-    this.model = model;
+  public TetrisPanel(TetrisModel m) {
+    this.model = m;
   }
 
   @Override
@@ -45,11 +46,7 @@ public class TetrisPanel extends JPanel {
     for (int y = 0; y < model.getBoard().getHeight(); y++) {
       for (int x = 0; x < model.getBoard().getWidth(); x++) {
         g2d.setColor(Color.WHITE);
-<<<<<<< Updated upstream
         g2d.drawRect(x * 20, y * 20, 20, 20);
-=======
-        g2d.drawRect(x * 20, y * 20, 20, 20)
->>>>>>> Stashed changes
 
         // draw the bricks, if present on the board
         if (model.getBoard().isOccupied(x, y)) {
@@ -82,7 +79,6 @@ public class TetrisPanel extends JPanel {
       g.setColor(c);
       g.fillRect(b.getX() * 20, b.getY() * 20, 20, 20);
     }
-
   }
 
   /**

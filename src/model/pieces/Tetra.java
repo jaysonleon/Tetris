@@ -133,4 +133,9 @@ public interface Tetra {
    */
   public void resetPosition(Board b);
 
+  // /**
+  //  * 
+  //  */
+  // public void changePType(Tetromino t, PieceType type); 
+
 }

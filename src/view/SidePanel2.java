@@ -4,7 +4,7 @@ import java.awt.*;
 
 import javax.swing.*;
 
-import model.TetrisModelImpl;
+import model.TetrisModel;
 
 /**
  * Represents the drawing panel for the right side of the GUI. Contains the HoldPanel and its label.
@@ -14,7 +14,7 @@ public class SidePanel2 extends JPanel {
    * Constructs a new SidePanel2.
    * @param m the model to be used
    */
-  public SidePanel2(TetrisModelImpl m) {
+  public SidePanel2(TetrisModel m) {
     this.setLayout(new BorderLayout());
 
     this.setBackground(Color.BLACK);

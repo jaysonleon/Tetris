@@ -27,6 +27,10 @@ public class TetrisModelImpl implements TetrisModel {
   private boolean gameOver;
   // List of listeners
   private final List<ModelFeatures> listeners;
+  // Int to track "streak"
+  private int streak; 
+  // Int to track number of lines received from player(s)
+  private int linesReceived;
 
   /**
    * Constructs a TetrisModelImpl with a default (10x20) empty board.
@@ -42,7 +46,6 @@ public class TetrisModelImpl implements TetrisModel {
     gameOver = false;
     listeners = new ArrayList<>();
   }
-
   /**
    * Convenience constructor for testing. Constructs a TetrisModelImpl with the given board.
    * @param b the board
@@ -97,6 +100,15 @@ public class TetrisModelImpl implements TetrisModel {
         this.updateLevel();
         linesCleared -= 10;
       }
+      if (lines > 1) {
+        this.streak += lines; 
+        if (this.streak > 3) {
+          
+        }
+      } else {
+        this.streak = 0;
+      }
+
       currentPiece = nextPiece;
       nextPiece = TetraFactory.getRandomTetra();
       this.isGameOver();
@@ -146,6 +158,12 @@ public class TetrisModelImpl implements TetrisModel {
       currentPiece.rotateCCW();
     }
     this.update();
+  }
+
+  @Override 
+  public void receiveLines(int num) {
+    this.linesReceived += num;
+    System.out.println("Lines received: " + this.linesReceived);
   }
 
   @Override

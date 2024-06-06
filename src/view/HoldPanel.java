@@ -4,7 +4,7 @@ import java.awt.*;
 
 import javax.swing.*;
 
-import model.TetrisModelImpl;
+import model.TetrisModel;
 import model.pieces.Brick;
 import model.pieces.Tetra;
 
@@ -12,13 +12,13 @@ import model.pieces.Tetra;
  * Represents the drawing panel for the hold piece.
  */
 public class HoldPanel extends JPanel {
-  private final TetrisModelImpl model;
+  private final TetrisModel model;
 
   /**
    * Constructs a new HoldPanel.
    * @param model the model to be used
    */
-  public HoldPanel(TetrisModelImpl model) {
+  public HoldPanel(TetrisModel model) {
     this.model = model;
   }
 

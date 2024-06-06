@@ -4,20 +4,20 @@ import java.awt.*;
 
 import javax.swing.*;
 
-import model.TetrisModelImpl;
+import model.TetrisModel;
 
 /**
  * Represents the drawing panel for the score.
  */
 public class ScorePanel extends JPanel {
-  private final TetrisModelImpl model;
+  private final TetrisModel model;
   private final JLabel l1, l2, l3;
 
   /**
    * Constructs a new ScorePanel.
    * @param model the model to be used
    */
-  public ScorePanel(TetrisModelImpl model) {
+  public ScorePanel(TetrisModel model) {
     this.model = model;
 
     this.setBackground(Color.BLACK);
