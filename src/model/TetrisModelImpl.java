@@ -103,7 +103,7 @@ public class TetrisModelImpl implements TetrisModel {
   @Override 
   public void receiveLines(int num) {
     this.linesReceived += num;
-    System.out.println("Lines received: " + num);
+    // System.out.println("Lines received: " + num);
   }
 
   @Override
@@ -127,16 +127,32 @@ public class TetrisModelImpl implements TetrisModel {
         linesCleared -= 10;
       }
       if (lines > 0) {
-        this.streak += lines; 
-        if (this.streak > 1 && this.streak != 0) {
-          linesToSend += lines; 
-        } 
+        if (streak != 0) {
+          linesToSend = 0; 
+          streak += lines;   
+        } else {
+          if (lines == 1) {
+            linesToSend = 0; 
+            streak += lines; 
+          } else {
+            linesToSend = 0; 
+            streak += lines;
+          }
+        }
       } else {
-        this.streak = 0;
-        linesToSend = 0; 
+        if (streak > 0) {
+          linesToSend = streak; 
+        } else if (streak == 1) {
+          linesToSend = 0; 
+        }
+        else {
+          linesToSend = 0; 
+        }
+        streak = 0; 
       }
       currentPiece = nextPiece;
       nextPiece = TetraFactory.getRandomTetra();
+      System.out.println("Lines: " + lines + " Lines to send: " + linesToSend + " Streak: " + streak);
       this.isGameOver();
       this.sendLines(linesToSend);
       this.update();
@@ -247,7 +263,7 @@ public class TetrisModelImpl implements TetrisModel {
       currentPiece.moveDown();
       score += 2;
     }
-    this.update();
+    // this.update();
   }
 
   @Override

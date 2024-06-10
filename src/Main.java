@@ -25,7 +25,7 @@ public class Main {
     oppsP2.add(m1);
     if (args.length != 1) {
       c1 = new TetrisController(m1, v1, "easy", oppsP1);
-      c2 = new TetrisController(m2, v2, "medium", oppsP2);
+      c2 = new TetrisController(m2, v2, "easy", oppsP2);
     } else {
       String s = args[0];
       c1 = new TetrisController(m1, v1, s, oppsP1);
